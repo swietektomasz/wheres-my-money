@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import styles from './app.module.scss';
 
 function App() {
-  return <div>Hello there!</div>;
+  return <div className={styles.app}>Hello there!</div>;
 }
 
 const DocumentNode = document.getElementById('app');
