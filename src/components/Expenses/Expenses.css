@@ -1,0 +1,15 @@
+.expenses {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.expenses-budget {
+  flex-basis: 70%;
+  width: 100%;
+}
+
+.expenses-feed {
+  flex-basis: 70%;
+  width: 100%;
+}
