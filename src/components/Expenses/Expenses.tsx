@@ -1,6 +1,6 @@
 import { Budget } from "../Budget";
-
-import "./Expenses.css";
+import { Feed } from "../Feed";
+import { expensesData } from "./expenses-data";
 
 export function Expenses() {
   return (
@@ -8,7 +8,9 @@ export function Expenses() {
       <div className="expenses-budget">
         <Budget />
       </div>
-      <div className="expenses-feed">Actual expenses table</div>
+      <div className="expenses-feed">
+        <Feed expenses={expensesData} />
+      </div>
     </div>
   );
 }
