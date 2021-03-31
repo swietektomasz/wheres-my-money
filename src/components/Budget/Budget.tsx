@@ -2,19 +2,23 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import * as yup from "yup";
 
+import { useBudget } from "../../shared";
+
 const budgetSchema = yup.object().shape({
   budget: yup.number().required("Please set a budget first!"),
 });
 
 export function Budget() {
-  const [budget, setBudget] = useState<number>(0);
   const [editing, setEditing] = useState<boolean>(false);
+
+  const { state, dispatch } = useBudget();
+
   const formik = useFormik({
     initialValues: {
       budget: 0,
     },
     onSubmit: (values) => {
-      setBudget(values.budget);
+      if (dispatch) dispatch({ type: "increase-budget", amount: values.budget });
       setEditing(false);
     },
     validationSchema: budgetSchema,
@@ -25,7 +29,7 @@ export function Budget() {
       {editing ? (
         <form onSubmit={formik.handleSubmit} className="budget-form">
           <label className="budget-form__label" htmlFor="budget">
-            Budget amount
+            Increase the budget by:
           </label>
 
           <input
@@ -38,13 +42,17 @@ export function Budget() {
             value={formik.values.budget}
           />
           <button className="budget-form__button" type="submit">
-            Set budget
+            Increase
           </button>
         </form>
       ) : (
-        <div className="flex flex-row w-full">
-          <meter className="w-4/5 m-4" max={budget} value="55.93" title="Remaining budget"></meter>
-          <button onClick={() => setEditing(true)}>Edit</button>
+        <div className="flex justify-center w-full">
+          <div className="flex flex-row px-4 py-2 m-2 border-2 rounded-sm">
+            <h1 className="mx-4 text-lg font-bold">{state?.budget}</h1>
+            <button className="text-lg" onClick={() => setEditing(true)}>
+              +
+            </button>
+          </div>
         </div>
       )}
     </div>
