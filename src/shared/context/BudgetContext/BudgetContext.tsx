@@ -8,10 +8,16 @@ type BudgetContextType = {
 };
 
 type BudgetState = {
-  budget: number;
+  revenue: RevenueItem[];
 };
 
-type Action = { type: "increase-budget"; amount: number } | { type: "decrease-budget"; amount: number };
+type Action = { type: "add-to-revenue"; item: RevenueItem } | { type: "decrease-budget"; amount: number };
+
+type RevenueItem = {
+  amount: number;
+  title: string;
+  gain: boolean;
+};
 
 interface BudgetProviderProps {
   children: ReactNode;
@@ -19,17 +25,20 @@ interface BudgetProviderProps {
 
 function BudgetReducer(state: BudgetState, action: Action) {
   switch (action.type) {
-    case "increase-budget": {
-      return { ...state, budget: state.budget + action.amount };
+    case "add-to-revenue": {
+      return { ...state, revenue: [...state.revenue, action.item] };
     }
-    case "decrease-budget": {
-      return { ...state, budget: state.budget - action.amount };
-    }
+    default:
+      throw new Error();
   }
 }
 
+const initialState: BudgetState = {
+  revenue: [],
+};
+
 function BudgetProvider({ children }: BudgetProviderProps) {
-  const [state, dispatch] = useReducer(BudgetReducer, { budget: 0 });
+  const [state, dispatch] = useReducer(BudgetReducer, initialState);
 
   return <BudgetContext.Provider value={{ state, dispatch }}>{children}</BudgetContext.Provider>;
 }

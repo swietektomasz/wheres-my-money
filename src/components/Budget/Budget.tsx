@@ -1,60 +1,55 @@
-import { useFormik } from "formik";
 import { useState } from "react";
+import { useFormik } from "formik";
 import * as yup from "yup";
 
-import { useBudget } from "../../shared";
+import { Input, useBudget } from "../../shared";
 
 const budgetSchema = yup.object().shape({
-  budget: yup.number().required("Please set a budget first!"),
+  title: yup.string().required("A title is required"),
+  amount: yup.string().required("The amount is also required"),
+  gain: yup.bool().required(),
 });
 
 export function Budget() {
   const [editing, setEditing] = useState<boolean>(false);
+  const { dispatch } = useBudget();
 
-  const { state, dispatch } = useBudget();
-
-  const formik = useFormik({
+  const { handleSubmit, handleChange, values, errors } = useFormik({
     initialValues: {
-      budget: 0,
+      title: "",
+      amount: "",
+      gain: false,
     },
-    onSubmit: (values) => {
-      if (dispatch) dispatch({ type: "increase-budget", amount: values.budget });
-      setEditing(false);
-    },
+    onSubmit: (values) => console.log(values),
     validationSchema: budgetSchema,
   });
 
   return (
-    <div className="flex flex-row justify-center">
-      {editing ? (
-        <form onSubmit={formik.handleSubmit} className="budget-form">
-          <label className="budget-form__label" htmlFor="budget">
-            Increase the budget by:
-          </label>
-
-          <input
-            className="budget-form__field"
-            required
-            id="budget"
-            name="budget"
-            type="number"
-            onChange={formik.handleChange}
-            value={formik.values.budget}
-          />
-          <button className="budget-form__button" type="submit">
-            Increase
-          </button>
-        </form>
-      ) : (
-        <div className="flex justify-center w-full">
-          <div className="flex flex-row px-4 py-2 m-2 border-2 rounded-sm">
-            <h1 className="mx-4 text-lg font-bold">{state?.budget}</h1>
-            <button className="text-lg" onClick={() => setEditing(true)}>
-              +
-            </button>
+    <div className="flex flex-col items-center">
+      <form onSubmit={handleSubmit}>
+        <Input name="title" label="Title" onChange={handleChange} type="text" errors={errors} />
+        <Input name="amount" label="Amount" onChange={handleChange} type="text" errors={errors} />
+        <label htmlFor="gain" className="flex my-4 text-center">
+          Gain
+          <input id="gain" type="checkbox" name="gain" onChange={handleChange} className="invisible opacity-0" />
+          <div
+            className={`flex items-center mx-2 ${
+              values.gain ? "bg-green-600 justify-start" : "bg-red-600 justify-end"
+            } w-16 h-6 rounded-xl transition-colors`}
+          >
+            <div className="w-5 h-5 m-1 bg-white rounded-full"></div>
           </div>
-        </div>
-      )}
+          Expense
+        </label>
+      </form>
+      <div className="flex">
+        <button
+          className={`w-48 p-4 m-2 border-2 ${values.gain ? "border-green-600" : "border-red-600"}`}
+          type="submit"
+        >
+          Add as {values.gain ? "a gain" : "an expense"}
+        </button>
+      </div>
     </div>
   );
 }
