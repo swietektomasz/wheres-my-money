@@ -1,0 +1,35 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""budget """
+type Budget {
+  id: ID!
+  title: String!
+  description: String
+  creationDate: Date!
+  amount: [String!]!
+}
+
+"""Date custom scalar type"""
+scalar Date
+
+type Query {
+  budget(id: String!): Budget!
+  budgets(skip: Int = 0, take: Int = 25): [Budget!]!
+}
+
+type Mutation {
+  addBudget(newBudgetData: NewBudgetInput!): Budget!
+  removeBudget(id: String!): Boolean!
+}
+
+input NewBudgetInput {
+  title: String!
+  description: String
+  amount: [String!]!
+}
+
+type Subscription {
+  budgetAdded: Budget!
+}
