@@ -1,8 +1,0 @@
-{
-  "name": "wheres-my-money",
-  "version": "1.0.0",
-  "main": "index.js",
-  "repository": "git@github.com:swietektomasz/wheres-my-money.git",
-  "author": "swietektomasz <swietek.tomasz@protonmail.com>",
-  "license": "MIT"
-}
